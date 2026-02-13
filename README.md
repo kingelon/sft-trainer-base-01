@@ -32,5 +32,4 @@ Experimentation scaffold for hands-on LLM finetuning — understanding model beh
 4. **Agent-aware** — `agents/` provides context for AI collaborators
 
 ## HF Cache
-Models are cached centrally at `$HF_HOME` (target: `/Users/vamsi/01_BUILD/_meta/models`).
-Set via: `export HF_HOME=/Users/vamsi/01_BUILD/_meta/models`
+Using default HF cache at `~/.cache/huggingface`. Can be overridden later via `export HF_HOME=<path>` if centralization is needed.

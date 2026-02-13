@@ -25,9 +25,12 @@ LLM finetuning experimentation — understanding model behaviors, input/output f
 - `meta-llama/Llama-3.1-8B-Instruct`
 - `mistralai/Mistral-7B-v0.1` / `mistralai/Mistral-7B-Instruct-v0.3`
 
+### Environment
+- **Conda env**: `finetune_base_env` — activate via `conda activate finetune_base_env`
+- **direnv**: This repo uses `direnv` to auto-load `.envrc` on `cd` into the project. Env vars, path adjustments, and conda activation are managed there.
+
 ### HF Cache
-Central HF cache target: `/Users/vamsi/01_BUILD/_meta/models`
-Env var: `export HF_HOME=/Users/vamsi/01_BUILD/_meta/models`
+Using default HF cache (`~/.cache/huggingface`). Can centralize later via `HF_HOME` env var if needed.
 
 ### Tech Stack
 - `transformers` + `tokenizers` — model loading, inference

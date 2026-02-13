@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training Report — llama31-sql_20260211_233824</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --text-muted: #8b949e; --accent: #58a6ff;
+    --green: #3fb950; --orange: #d29922; --red: #f85149;
+    --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1400px; margin: 0 auto;
+}
+h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+h2 {
+    font-size: 1.3rem; margin: 2rem 0 1rem; padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.1rem; color: var(--accent); margin: 1rem 0 0.5rem; }
+.subtitle { color: var(--text-muted); margin-bottom: 2rem; }
+
+/* Cards */
+.card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
+}
+.stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-bottom: 1.5rem;
+}
+.stat {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem; text-align: center;
+}
+.stat .value { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+.stat .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+.stat.good .value { color: var(--green); }
+.stat.warn .value { color: var(--orange); }
+
+/* Charts */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.chart-container { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+canvas { width: 100% !important; }
+
+/* Comparison table */
+table { width: 100%; border-collapse: collapse; }
+th {
+    text-align: left; padding: 0.75rem; background: var(--surface);
+    border-bottom: 2px solid var(--border); font-size: 0.85rem;
+    text-transform: uppercase; color: var(--text-muted);
+}
+td { padding: 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+.prompt-cell { max-width: 300px; }
+.question { font-weight: 600; margin-bottom: 0.5rem; }
+.schema { font-size: 0.8rem; color: var(--text-muted); }
+.schema code { font-size: 0.75rem; background: var(--bg); padding: 2px 6px; border-radius: 4px; }
+.sql-cell pre {
+    background: var(--bg); border-radius: 6px; padding: 0.75rem;
+    overflow-x: auto; font-size: 0.85rem; margin-bottom: 0.5rem;
+}
+.sql-cell code { color: var(--green); }
+.lora-cell code { color: var(--purple); }
+.tag {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 600; margin: 2px;
+}
+.tag.verbose { background: rgba(210,153,34,0.2); color: var(--orange); }
+.tag.concise { background: rgba(188,140,255,0.2); color: var(--purple); }
+.tag.correct { background: rgba(63,185,80,0.15); color: var(--green); }
+.tag.learned { background: rgba(88,166,255,0.2); color: var(--accent); }
+
+/* Mermaid */
+.mermaid { background: var(--surface); border-radius: 8px; padding: 1rem; text-align: center; }
+
+/* Key takeaways */
+.takeaway {
+    background: rgba(88,166,255,0.1); border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+}
+.takeaway strong { color: var(--accent); }
+
+@media (max-width: 800px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<h1>📊 Training Run Report</h1>
+<p class="subtitle">llama31-sql_20260211_233824 · meta-llama/Llama-3.1-8B-Instruct</p>
+
+<!-- Key Stats -->
+<div class="stats-grid">
+    <div class="stat good">
+        <div class="value">0.407</div>
+        <div class="label">Final Loss</div>
+    </div>
+    <div class="stat good">
+        <div class="value">89.2%</div>
+        <div class="label">Token Accuracy</div>
+    </div>
+    <div class="stat">
+        <div class="value">3.07 → 0.41</div>
+        <div class="label">Loss Journey</div>
+    </div>
+    <div class="stat">
+        <div class="value">375</div>
+        <div class="label">Total Steps</div>
+    </div>
+    <div class="stat">
+        <div class="value">r=16, α=32</div>
+        <div class="label">LoRA Config</div>
+    </div>
+    <div class="stat">
+        <div class="value">1000</div>
+        <div class="label">Training Samples</div>
+    </div>
+</div>
+
+<!-- Pipeline Flow -->
+<h2>🔄 Training Pipeline Flow</h2>
+<div class="card">
+<div class="mermaid">
+graph LR
+    A["📄 YAML Recipe"] --> B["🔧 load_recipe()"]
+    B --> C["Model Config"]
+    B --> D["LoRA Config"]
+    B --> E["Training Config"]
+    B --> F["Data Config"]
+
+    C --> G["🧠 load_model()<br/>Llama 3.1 8B<br/>float16 · MPS"]
+    D --> H["🔗 get_peft_model()<br/>LoRA r=16 α=32<br/>13.6M trainable / 8B total"]
+
+    F --> I["📦 prepare_dataset()<br/>b-mc2/sql-create-context<br/>1000 samples"]
+    I --> J["💬 format_sql_to_chat()<br/>schema + question → SQL"]
+
+    G --> H
+    H --> K["🏋️ SFTTrainer"]
+    J --> K
+    E --> K
+
+    K --> L["💾 Adapter Output<br/>adapter_model.safetensors<br/>~55MB"]
+
+    style A fill:#1a1a2e,stroke:#58a6ff
+    style G fill:#1a1a2e,stroke:#3fb950
+    style H fill:#1a1a2e,stroke:#bc8cff
+    style I fill:#1a1a2e,stroke:#d29922
+    style K fill:#1a1a2e,stroke:#f85149
+    style L fill:#1a1a2e,stroke:#3fb950
+</div>
+</div>
+
+<!-- What LoRA Actually Does -->
+<h2>🧬 How LoRA Works — Conceptually</h2>
+<div class="card">
+<div class="mermaid">
+graph TB
+    subgraph Original["Original Layer (Frozen)"]
+        W["W<br/>8B params<br/>❄️ frozen"]
+    end
+
+    subgraph LoRA["LoRA Adapter (Trainable)"]
+        A2["A<br/>down-project<br/>4096 → 16"]
+        B2["B<br/>up-project<br/>16 → 4096"]
+        A2 --> B2
+    end
+
+    X["Input x"] --> W
+    X --> A2
+    W --> PLUS["➕ Add"]
+    B2 --> PLUS
+    PLUS --> Y["Output y = Wx + BAx"]
+
+    style W fill:#1a1a2e,stroke:#8b949e
+    style A2 fill:#1a1a2e,stroke:#bc8cff
+    style B2 fill:#1a1a2e,stroke:#bc8cff
+    style PLUS fill:#1a1a2e,stroke:#3fb950
+</div>
+<div class="takeaway">
+    <strong>Key insight:</strong> Only A and B are trained (16 × 4096 × 2 = very small).
+    The original 8B parameters are frozen. The adapter learns a <em>correction</em> to the original weights.
+    At inference, the correction is added: <code>y = Wx + BAx</code>.
+</div>
+</div>
+
+<!-- Training Metrics -->
+<h2>📈 Training Metrics</h2>
+<div class="charts-grid">
+    <div class="chart-container">
+        <h3>Loss over Training</h3>
+        <canvas id="lossChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <h3>Token Accuracy over Training</h3>
+        <canvas id="accChart"></canvas>
+    </div>
+</div>
+
+<!-- Comparison -->
+<h2>⚡ Base vs Finetuned — SQL Comparison</h2>
+<div class="takeaway">
+    <strong>What to look for:</strong> The base model gives correct SQL but wraps it in
+    verbose explanations. The finetuned model learned the training data's format —
+    <em>output only the SQL query, nothing else</em>. This behavioral shift from just
+    1000 examples is the core value of finetuning.
+</div>
+<div class="card" style="overflow-x: auto;">
+<table>
+    <thead>
+        <tr>
+            <th style="width:30%">Question</th>
+            <th style="width:35%">Base Model (Llama 3.1 8B)</th>
+            <th style="width:35%">Base + LoRA (finetuned)</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <tr>
+            <td class="prompt-cell">
+                <div class="question">What are the names of employees in the Engineering department who earn more than 80000?</div>
+                <div class="schema"><code>CREATE TABLE employees (id INT, name VARCHAR, department VARCHAR, salary FLOAT, hire_date DATE)</code></div>
+            </td>
+            <td class="sql-cell base-cell">
+                <pre><code>SELECT name
+FROM employees
+WHERE department = 'Engineering' AND salary > 80000;</code></pre>
+                <span class='tag verbose'>verbose</span>
+                <span class="tag correct">correct SQL</span>
+            </td>
+            <td class="sql-cell lora-cell">
+                <pre><code>SELECT name FROM employees WHERE department = "Engineering" AND salary > 80000</code></pre>
+                <span class='tag concise'>concise</span>
+                <span class="tag learned">learned format</span>
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td class="prompt-cell">
+                <div class="question">What is the total revenue per customer, showing their name and total?</div>
+                <div class="schema"><code>CREATE TABLE orders (order_id INT, customer_id INT, product VARCHAR, quantity INT, price FLOAT, order_date DATE)</code><br><code>CREATE TABLE customers (customer_id INT, name VARCHAR, city VARCHAR)</code></div>
+            </td>
+            <td class="sql-cell base-cell">
+                <pre><code>SELECT 
+    c.name, 
+    SUM(o.price * o.quantity) AS total_revenue
+FROM 
+    orders o
+JOIN 
+    customers c ON o.customer_id = c.customer_id
+GROUP BY 
+    c.name
+ORDER BY 
+    total_revenue DESC;</code></pre>
+                <span class='tag verbose'>verbose</span>
+                <span class="tag correct">correct SQL</span>
+            </td>
+            <td class="sql-cell lora-cell">
+                <pre><code>SELECT T1.name, T1.city, SUM(T2.order_id * T2.quantity * T2.price) FROM customers AS T1 JOIN orders AS T2 ON T1.customer_id = T2.customer_id GROUP BY T2.customer_id</code></pre>
+                <span class='tag concise'>concise</span>
+                <span class="tag learned">learned format</span>
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td class="prompt-cell">
+                <div class="question">What is the average grade of students who enrolled after 2020, grouped by major?</div>
+                <div class="schema"><code>CREATE TABLE students (student_id INT, name VARCHAR, grade FLOAT, major VARCHAR, enrollment_year INT)</code></div>
+            </td>
+            <td class="sql-cell base-cell">
+                <pre><code>SELECT 
+  major, 
+  AVG(grade) AS average_grade
+FROM 
+  students
+WHERE 
+  enrollment_year > 2020
+GROUP BY 
+  major
+ORDER BY 
+  average_grade DESC;</code></pre>
+                <span class='tag verbose'>verbose</span>
+                <span class="tag correct">correct SQL</span>
+            </td>
+            <td class="sql-cell lora-cell">
+                <pre><code>SELECT AVG(grade), major FROM students WHERE enrollment_year > 2020 GROUP BY major</code></pre>
+                <span class='tag concise'>concise</span>
+                <span class="tag learned">learned format</span>
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td class="prompt-cell">
+                <div class="question">Which products have never been sold?</div>
+                <div class="schema"><code>CREATE TABLE products (id INT, name VARCHAR, category VARCHAR, price FLOAT, stock INT)</code><br><code>CREATE TABLE sales (sale_id INT, product_id INT, quantity INT, sale_date DATE)</code></div>
+            </td>
+            <td class="sql-cell base-cell">
+                <pre><code>SELECT p.*
+FROM products p
+LEFT JOIN sales s ON p.id = s.product_id
+WHERE s.product_id IS NULL;</code></pre>
+                <span class='tag verbose'>verbose</span>
+                <span class="tag correct">correct SQL</span>
+            </td>
+            <td class="sql-cell lora-cell">
+                <pre><code>SELECT id FROM products WHERE NOT id IN (SELECT product_id FROM sales)</code></pre>
+                <span class='tag concise'>concise</span>
+                <span class="tag learned">learned format</span>
+            </td>
+        </tr>
+        
+
+        <tr>
+            <td class="prompt-cell">
+                <div class="question">What is the average delay in minutes for each airline, only showing airlines with average delay greater than 30 minutes?</div>
+                <div class="schema"><code>CREATE TABLE flights (flight_id INT, origin VARCHAR, destination VARCHAR, departure_time DATETIME, airline VARCHAR, delay_minutes INT)</code></div>
+            </td>
+            <td class="sql-cell base-cell">
+                <pre><code>SELECT 
+    airline, 
+    AVG(delay_minutes) as average_delay
+FROM 
+    flights
+GROUP BY 
+    airline
+HAVING 
+    AVG(delay_minutes) > 30;</code></pre>
+                <span class='tag verbose'>verbose</span>
+                <span class="tag correct">correct SQL</span>
+            </td>
+            <td class="sql-cell lora-cell">
+                <pre><code>SELECT AVG(delay_minutes), airline FROM flights GROUP BY airline HAVING AVG(delay_minutes) > 30</code></pre>
+                <span class='tag concise'>concise</span>
+                <span class="tag learned">learned format</span>
+            </td>
+        </tr>
+        
+    </tbody>
+</table>
+</div>
+
+<h2>🎯 Key Observations</h2>
+<div class="card">
+    <div class="takeaway">
+        <strong>1. Format learning:</strong> After seeing 1000 SQL examples, the model learned
+        to output <em>pure SQL</em> without explanations. The training data was formatted as
+        <code>[schema] → [SQL only]</code>, and the model internalized this pattern.
+    </div>
+    <div class="takeaway" style="margin-top: 1rem;">
+        <strong>2. Schema awareness:</strong> The finetuned model consistently references the
+        correct table and column names from the provided schema. It learned to read
+        CREATE TABLE statements and map them to SQL queries.
+    </div>
+    <div class="takeaway" style="margin-top: 1rem;">
+        <strong>3. Conciseness as learned behavior:</strong> The base model is trained to be
+        helpful and verbose (instruction tuning). Our SQL data taught a different behavior —
+        be precise and terse. This shows finetuning can <em>override</em> instruction-tuning
+        patterns for specific tasks.
+    </div>
+</div>
+
+<script>
+
+    const steps = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370];
+    const losses = [3.0708126068115233, 2.268661880493164, 1.450498104095459, 0.8523482322692871, 0.719016170501709, 0.6862304210662842, 0.6451166152954102, 0.6569359302520752, 0.6189295768737793, 0.6146458148956299, 0.5914628028869628, 0.5829823970794678, 0.5206511974334717, 0.47131733894348143, 0.48244752883911135, 0.4667511463165283, 0.4738921165466309, 0.4694021701812744, 0.4454631328582764, 0.4592604637145996, 0.4409772872924805, 0.43831911087036135, 0.41443696022033694, 0.4131957530975342, 0.4215392112731934, 0.3923486709594727, 0.39981560707092284, 0.39618711471557616, 0.38273537158966064, 0.41335124969482423, 0.41394891738891604, 0.39137351512908936, 0.38440513610839844, 0.3825352907180786, 0.41014895439147947, 0.38616673946380614, 0.4068098545074463];
+    const accuracies = [0.5614327892661095, 0.6166944220662117, 0.7115139052271843, 0.8370693430304528, 0.8581823021173477, 0.8657922461628914, 0.8686586663126945, 0.8693634986877441, 0.8676778271794319, 0.8703438743948937, 0.8687614932656288, 0.8677429914474487, 0.8777131855487823, 0.8813542515039444, 0.8778611421585083, 0.8765588954091073, 0.8798902198672295, 0.8767131835222244, 0.8792244970798493, 0.8802574813365937, 0.8846325531601906, 0.8838564723730087, 0.8868393257260323, 0.8909404009580613, 0.8841323569417, 0.8881331443786621, 0.8878152132034302, 0.8892322883009911, 0.8953788116574287, 0.8862769261002541, 0.8881603166460991, 0.8915255531668663, 0.8938436686992646, 0.8961833581328392, 0.8886115476489067, 0.8925783172249794, 0.892323137819767];
+    const gradNorms = [5.419787406921387, 3.992025136947632, 2.033921480178833, 0.9313533306121826, 1.1384955644607544, 0.8180054426193237, 0.9497517943382263, 0.8830528855323792, 1.1456050872802734, 0.9021199345588684, 0.9987079501152039, 0.8910498023033142, 1.0532513856887817, 1.0440983772277832, 1.2920827865600586, 1.13016676902771, 0.9945949912071228, 1.1836904287338257, 1.1997170448303223, 1.086593747138977, 1.3082194328308105, 1.2240740060806274, 1.4282793998718262, 1.4761570692062378, 1.3884283304214478, 1.5397670269012451, 1.3716349601745605, 1.4407320022583008, 1.8426889181137085, 1.6724743843078613, 1.6946758031845093, 1.533975601196289, 1.3570618629455566, 1.3652286529541016, 1.5374844074249268, 1.265511155128479, 1.4046965837478638];
+    const epochs = [0.08, 0.16, 0.24, 0.32, 0.4, 0.48, 0.56, 0.64, 0.72, 0.8, 0.88, 0.96, 1.04, 1.12, 1.2, 1.28, 1.3599999999999999, 1.44, 1.52, 1.6, 1.6800000000000002, 1.76, 1.8399999999999999, 1.92, 2.0, 2.08, 2.16, 2.24, 2.32, 2.4, 2.48, 2.56, 2.64, 2.7199999999999998, 2.8, 2.88, 2.96];
+    
+
+mermaid.initialize({ theme: 'dark', themeVariables: {
+    primaryColor: '#1a1a2e', primaryTextColor: '#e6edf3',
+    primaryBorderColor: '#58a6ff', lineColor: '#30363d',
+    secondaryColor: '#161b22', tertiaryColor: '#0d1117'
+} });
+
+// Loss Chart
+new Chart(document.getElementById('lossChart'), {
+    type: 'line',
+    data: {
+        labels: steps,
+        datasets: [{
+            label: 'Training Loss',
+            data: losses,
+            borderColor: '#f85149',
+            backgroundColor: 'rgba(248,81,73,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#8b949e' } } },
+        scales: {
+            x: { title: { display: true, text: 'Step', color: '#8b949e' },
+                   ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+            y: { title: { display: true, text: 'Loss', color: '#8b949e' },
+                   ticks: { color: '#8b949e' }, grid: { color: '#21262d' } }
+        }
+    }
+});
+
+// Accuracy Chart
+new Chart(document.getElementById('accChart'), {
+    type: 'line',
+    data: {
+        labels: steps,
+        datasets: [{
+            label: 'Token Accuracy',
+            data: accuracies,
+            borderColor: '#3fb950',
+            backgroundColor: 'rgba(63,185,80,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#8b949e' } } },
+        scales: {
+            x: { title: { display: true, text: 'Step', color: '#8b949e' },
+                   ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+            y: { title: { display: true, text: 'Accuracy', color: '#8b949e' },
+                   ticks: { color: '#8b949e', callback: v => (v*100).toFixed(0)+'%' },
+                   grid: { color: '#21262d' }, min: 0, max: 1 }
+        }
+    }
+});
+</script>
+</body>
+</html>

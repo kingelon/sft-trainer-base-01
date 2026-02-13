@@ -1,0 +1,10 @@
+Recipe: configs/training/llama31_sql_lora.yaml
+Model: meta-llama/Llama-3.1-8B-Instruct
+Tag: llama31-sql
+Device: mps
+
+train_runtime: 1312.6364
+train_samples_per_second: 2.285
+train_steps_per_second: 0.286
+total_flos: 1.666890967474176e+16
+train_loss: 0.8186402053833007

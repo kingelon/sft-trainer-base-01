@@ -1,0 +1,31 @@
+Given the following SQL table schema:
+
+CREATE TABLE employees (id INT, name VARCHAR, department VARCHAR, salary FLOAT, hire_date DATE)
+
+Write a SQL query to answer: What are the names of employees in the Engineering department who earn more than 80000?
+---
+Given the following SQL table schema:
+
+CREATE TABLE orders (order_id INT, customer_id INT, product VARCHAR, quantity INT, price FLOAT, order_date DATE)
+CREATE TABLE customers (customer_id INT, name VARCHAR, city VARCHAR)
+
+Write a SQL query to answer: What is the total revenue per customer, showing their name and total?
+---
+Given the following SQL table schema:
+
+CREATE TABLE students (student_id INT, name VARCHAR, grade FLOAT, major VARCHAR, enrollment_year INT)
+
+Write a SQL query to answer: What is the average grade of students who enrolled after 2020, grouped by major?
+---
+Given the following SQL table schema:
+
+CREATE TABLE products (id INT, name VARCHAR, category VARCHAR, price FLOAT, stock INT)
+CREATE TABLE sales (sale_id INT, product_id INT, quantity INT, sale_date DATE)
+
+Write a SQL query to answer: Which products have never been sold?
+---
+Given the following SQL table schema:
+
+CREATE TABLE flights (flight_id INT, origin VARCHAR, destination VARCHAR, departure_time DATETIME, airline VARCHAR, delay_minutes INT)
+
+Write a SQL query to answer: What is the average delay in minutes for each airline, only showing airlines with average delay greater than 30 minutes?
