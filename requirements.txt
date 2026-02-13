@@ -1,0 +1,19 @@
+# Core
+transformers>=4.40.0
+tokenizers
+datasets
+accelerate
+
+# LoRA / QLoRA
+peft>=0.10.0
+bitsandbytes>=0.43.0
+
+# Training
+trl>=0.8.0
+
+# Optional: tracking
+# wandb
+
+# Utilities
+scipy
+safetensors

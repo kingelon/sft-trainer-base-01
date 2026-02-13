@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ML Artifacts (large)
+*.bin
+*.safetensors
+*.gguf
+*.pt
+*.pth
+*.onnx
+checkpoint-*/
+
+# Tracking
+wandb/
+mlruns/
+*.log
+
+# Data (large files)
+*.parquet
+*.arrow
+*.csv
+!data/**/*.csv   # allow small CSV in data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+*.env.local
+venv/
+.venv/
+
+# Symlinks to central storage (track the links, not targets)
+# models/ and data/ may contain symlinks — that's fine
