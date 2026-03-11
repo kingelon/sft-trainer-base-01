@@ -47,28 +47,37 @@ Use these verified benefits when writing pitches. Only cite rewards and features
 - Best for: businesses with concentrated spend in recurring categories
 
 **Business Green** | $95/yr
-- Membership Rewards points on all general business purchases
+- 2x Membership Rewards on flights and prepaid hotels via AmexTravel.com
+- 1x on all other eligible purchases
 - Simple expense tracking and management
 - Best for: everyday spend, small teams, cost-conscious, low-complexity operations
 
 ### Corporate Cards (company liability, central billing, admin controls, multiple employees)
 
 **Corporate Platinum** | $550/yr
-- Premium executive travel: global lounge access, airline credits
+- 5x Membership Rewards on flights booked via AmexTravel.com
 - 5% cashback on employee card spending
-- Easy administrator access and controls
-- Company liability, centralized billing
+- Global lounge access (Centurion, Priority Pass, Delta Sky Club, and more)
+- Up to $200 airline fee credit per year
+- Up to $600 in annual hotel credits (Fine Hotels + Resorts and The Hotel Collection via Amex Travel)
+- CLEAR® Plus credit, Global Entry or TSA PreCheck fee credit
+- Company liability, centralized billing, administrator controls
+- Hilton Gold and Marriott Gold Elite status
 - Best for: frequent executive travel, large teams, high company-wide spend
 
 **Corporate Gold** | $250/yr
-- Travel and entertainment benefits
+- Membership Rewards points on eligible purchases
+- Up to $100 airline fee credit per year
+- 5% Uber Cash on business Uber rides and Uber Eats orders
+- Global Entry or TSA PreCheck fee credit
+- Hilton Honors Silver status
 - Company liability, centralized billing
 - Best for: companies with moderate travel and entertainment spend across employees
 
 **Corporate Green** | $75/yr
-- General employee spending card for purchases and expenses
+- Membership Rewards points on eligible purchases
+- General employee spending card for purchases, expenses, and occasional travel
 - Company liability, centralized billing
-- Occasional travel coverage
 - Best for: core employees handling day-to-day spending and routine operational expenses
 
 **Corporate Purchase Card** | $0/yr
@@ -286,12 +295,12 @@ conversation_opener: "Priya, with 40 employees across multiple locations, I want
 1. corp_propensity = "High Corp" → maps to Corporate Gold
 2. 18 employees, architecture firm → moderate travel (client sites), regular entertainment (client meetings)
 3. No existing AMEX → frame as a new program
-4. CGold benefits to highlight: travel and entertainment benefits, company liability, centralized billing, $250/yr fee
+4. CGold benefits to highlight: MR points, $100 airline fee credit, 5% Uber Cash on business rides, company liability, centralized billing, $250/yr fee
 ```
 
 **Output:**
 ```
-pitch: David Weston's architecture firm does $5.4M in revenue with 18 employees who regularly travel for client site visits and project reviews. A Corporate Gold Card at $250 a year gives the firm company liability and centralized billing, with travel and entertainment benefits that align well with how the team spends — client dinners, site travel, and project-related expenses. It puts all of that under one company program, giving David visibility into team spending while keeping annual costs manageable for a firm of this size.
+pitch: David Weston's architecture firm does $5.4M in revenue with 18 employees who regularly travel for client site visits and project reviews. A Corporate Gold Card at $250 a year gives the firm company liability and centralized billing, with Membership Rewards on every purchase, a $100 annual airline fee credit, and 5% Uber Cash on business rides — all useful for a team that's traveling to client sites. It puts all of that under one company program with Hilton Silver status for the team, giving David centralized visibility into spending while keeping annual costs manageable.
 
 conversation_opener: "David, with your team traveling to client sites regularly, I wanted to show you a corporate card option that covers travel and entertainment under one company program."
 ```
