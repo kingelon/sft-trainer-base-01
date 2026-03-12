@@ -1,9 +1,18 @@
 # Prompt Engineering
 
-Reusable prompt solutions for AMEX use cases. Each subfolder is a self-contained module with its own system prompt, input schema, knowledge base, and examples.
+> Root directory for prompt design, iteration, and client delivery.
 
-## Modules
+## Structure
 
-| Module | Purpose |
-|---|---|
-| `sale_pitch/` | Batch-generate tailored sales pitches for reps from CRM lead data |
+```
+prompt_engineering/
+├── README.md          ← you are here
+└── clientwork/        ← client-facing prompt projects
+    └── lead_brief/    ← lead briefing components (pitch, summary, qualification)
+```
+
+## Quick Links
+
+- **Lead Brief project** → [clientwork/lead_brief/](clientwork/lead_brief/)
+- **Active pitch prompt** → [clientwork/lead_brief/pitch/prompt_v1_structured.md](clientwork/lead_brief/pitch/prompt_v1_structured.md)
+- **Input field schema** → [clientwork/lead_brief/_schema/input_fields.md](clientwork/lead_brief/_schema/input_fields.md)
