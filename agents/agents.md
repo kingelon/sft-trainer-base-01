@@ -11,6 +11,7 @@ LLM finetuning experimentation — understanding model behaviors, input/output f
 | File | Purpose |
 |------|---------|
 | `agents.md` | This file. Agentic context and conventions |
+| `conventions.md` | Directory ownership rules — where agents vs humans write files |
 | `adr_log.md` | Timestamped decision/action log (append-only) |
 | `to_vamsi.md` | High-signal comms to Vamsi (sparse, important only) |
 

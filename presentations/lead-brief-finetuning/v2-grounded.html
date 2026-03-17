@@ -1,0 +1,1153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Lead Brief Intelligence: Fine-tuning POC</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/theme/white.css" id="theme">
+
+    <style>
+        :root {
+            --amex-navy: #00175a;
+            --amex-blue: #006fcf;
+            --amex-light-blue: #66b5ff;
+            --amex-gray: #f5f6f8;
+            --amex-dark-text: #333333;
+            --amex-green: #1a7a3a;
+            --amex-orange: #d45500;
+            --amex-red: #c41230;
+        }
+
+        .reveal {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--amex-dark-text);
+            background-color: var(--amex-gray);
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4,
+        .reveal h5,
+        .reveal h6 {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--amex-navy);
+            text-transform: none;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        .reveal h1 {
+            font-size: 2em;
+            text-shadow: none;
+            margin-bottom: 10px;
+        }
+
+        .reveal h2 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        .reveal h3 {
+            font-size: 0.9em;
+            color: var(--amex-blue);
+            margin-bottom: 6px;
+        }
+
+        .reveal p {
+            color: var(--amex-dark-text);
+            font-size: 0.55em;
+            line-height: 1.4;
+            margin: 0 0 6px 0;
+        }
+
+        .reveal ul,
+        .reveal ol {
+            font-size: 0.55em;
+            line-height: 1.3;
+        }
+
+        .reveal li {
+            margin-bottom: 4px;
+        }
+
+        .reveal strong {
+            color: var(--amex-navy);
+        }
+
+        .reveal blockquote {
+            border-left: 4px solid var(--amex-blue);
+            background: white;
+            padding: 12px 16px;
+            font-size: 0.6em;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+            font-style: normal;
+            color: var(--amex-dark-text);
+            width: 90%;
+            margin: 10px auto;
+        }
+
+        .highlight-box {
+            background-color: white;
+            border-top: 3px solid var(--amex-blue);
+            padding: 10px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin: 6px 0;
+            text-align: left;
+        }
+
+        .highlight-box p {
+            margin: 0;
+        }
+
+        .reveal table {
+            font-size: 0.5em;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .reveal table th {
+            background-color: var(--amex-navy);
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            text-align: left;
+        }
+
+        .reveal table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .reveal table tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+
+        .amx-footer {
+            position: absolute;
+            bottom: 12px;
+            left: 20px;
+            z-index: 20;
+            font-size: 0.45em;
+            color: #aaa;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .amx-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--amex-navy) 0%, var(--amex-blue) 100%);
+            z-index: 20;
+        }
+
+        .mermaid {
+            font-size: 0.48em;
+            margin-top: 8px;
+        }
+
+        .reveal .progress span {
+            background: var(--amex-blue);
+        }
+
+        .reveal .controls {
+            color: var(--amex-blue);
+        }
+
+        .split-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .col-50 {
+            width: 48%;
+        }
+
+        .col-40 {
+            width: 38%;
+        }
+
+        .col-60 {
+            width: 58%;
+        }
+
+        .approach-card {
+            background: white;
+            border-radius: 5px;
+            padding: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .approach-card h4 {
+            font-size: 0.7em;
+            margin: 0 0 5px 0;
+        }
+
+        .approach-card p {
+            font-size: 0.5em;
+            margin: 0;
+        }
+
+        .approach-card .verdict {
+            margin-top: 8px;
+            padding: 6px 8px;
+            border-radius: 3px;
+            font-size: 0.48em;
+            font-style: italic;
+        }
+
+        .pipeline-step {
+            background: white;
+            border-radius: 6px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .pipeline-step .step-num {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 0.65em;
+            margin-bottom: 5px;
+        }
+
+        .pipeline-step h4 {
+            font-size: 0.7em;
+            margin: 0 0 4px 0;
+            color: var(--amex-navy);
+        }
+
+        .pipeline-step p {
+            font-size: 0.48em;
+            margin: 0;
+            color: #666;
+        }
+
+        .pipeline-step .tech-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.45em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .metric-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.55em;
+        }
+
+        .metric-row .metric-name {
+            min-width: 140px;
+            font-weight: 600;
+            color: var(--amex-navy);
+            font-size: 0.9em;
+        }
+
+        .metric-row .metric-bar {
+            flex: 1;
+            height: 18px;
+            background: #e8e8e8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .metric-row .metric-fill {
+            height: 100%;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .value-pillar {
+            background: white;
+            border-radius: 6px;
+            padding: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .value-pillar .icon {
+            font-size: 1.1em;
+            margin-bottom: 4px;
+        }
+
+        .value-pillar h4 {
+            font-size: 0.7em;
+            margin: 0 0 4px 0;
+            color: var(--amex-navy);
+        }
+
+        .value-pillar p {
+            font-size: 0.48em;
+            margin: 0;
+            color: #555;
+            line-height: 1.3;
+        }
+
+        .callout {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.5em;
+            text-align: left;
+            margin-top: 8px;
+        }
+
+        .callout.insight {
+            background: rgba(0, 111, 207, 0.07);
+            border-left: 3px solid var(--amex-blue);
+        }
+
+        .callout.warning {
+            background: rgba(212, 85, 0, 0.07);
+            border-left: 3px solid var(--amex-orange);
+        }
+
+        .callout.success {
+            background: rgba(26, 122, 58, 0.07);
+            border-left: 3px solid var(--amex-green);
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            border-top: 3px solid var(--amex-blue);
+        }
+
+        .case-card h4 {
+            font-size: 0.65em;
+            margin: 0 0 4px 0;
+            color: var(--amex-navy);
+        }
+
+        .case-card p {
+            font-size: 0.48em;
+            margin: 0 0 2px 0;
+            color: #555;
+        }
+
+        .case-card .result {
+            font-size: 0.5em;
+            color: var(--amex-green);
+            font-weight: bold;
+        }
+
+        .case-card .source {
+            font-size: 0.42em;
+            color: #888;
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        .signal-card {
+            background: white;
+            border-radius: 5px;
+            padding: 8px 10px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            border-left: 3px solid var(--amex-blue);
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        .signal-card h4 {
+            font-size: 0.65em;
+            margin: 0 0 3px 0;
+            color: var(--amex-navy);
+        }
+
+        .signal-card p {
+            font-size: 0.48em;
+            margin: 0;
+            color: #666;
+        }
+
+        .appendix-marker {
+            background: var(--amex-navy);
+            color: white;
+            padding: 3px 12px;
+            border-radius: 3px;
+            font-size: 0.48em;
+            display: inline-block;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .reveal pre {
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 5px;
+            font-size: 0.48em;
+        }
+
+        .reveal code {
+            background: #282c34 !important;
+            color: #abb2bf !important;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .reveal .slides section {
+            padding: 20px 40px 30px 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="amx-accent"></div>
+    <div class="amx-footer">LEAD BRIEF INTELLIGENCE | FINE-TUNING POC</div>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- ===== SLIDE 1: Title ===== -->
+            <section>
+                <h1 style="color: var(--amex-navy);">Lead Brief Intelligence</h1>
+                <h3 style="color: var(--amex-blue); margin-top: 8px; font-size: 1em;">Fine-tuning for Structured Lead
+                    Summaries — POC</h3>
+
+                <div class="highlight-box" style="margin-top: 25px;">
+                    <p style="font-size: 0.6em;"><strong>Objective:</strong> Explore whether fine-tuning can transform a
+                        general-purpose LLM into a specialized lead-brief generator — producing consistent, structured
+                        summaries from JSON input with a short prompt, reducing reliance on long prompt engineering.</p>
+                </div>
+
+                <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+                    <div style="font-size: 0.55em; color: #666;"><strong>Model:</strong> Llama 3.1 8B Instruct</div>
+                    <div style="font-size: 0.55em; color: #666;">|</div>
+                    <div style="font-size: 0.55em; color: #666;"><strong>Method:</strong> LoRA (0.17% params)</div>
+                    <div style="font-size: 0.55em; color: #666;">|</div>
+                    <div style="font-size: 0.55em; color: #666;"><strong>Data:</strong> ~200 synthetic examples</div>
+                    <div style="font-size: 0.55em; color: #666;">|</div>
+                    <div style="font-size: 0.55em; color: #666;"><strong>Infra:</strong> On-prem GPU</div>
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 2: Current Approaches ===== -->
+            <section>
+                <h2>Current Approaches: What We Observed</h2>
+                <p style="text-align: center; margin-bottom: 10px;">We tested two approaches to generate lead briefs
+                    from structured JSON data.</p>
+
+                <div class="split-layout">
+                    <div class="approach-card col-50" style="border-top: 3px solid var(--amex-blue);">
+                        <h4 style="color: var(--amex-blue);">Approach A: Prompt + Few-Shot Examples</h4>
+                        <p>Detailed prompt with formatting rules and 2–3 example input/output pairs. Covers card types,
+                            spend data, intent signals.</p>
+                        <div class="verdict"
+                            style="background: rgba(0, 111, 207, 0.06); border-left: 3px solid var(--amex-blue);">
+                            Produces structured output — but requires a long prompt (~2000+ tokens) on every call.
+                            Works, though consistency across varied inputs is uncertain at scale.
+                        </div>
+                    </div>
+                    <div class="approach-card col-50" style="border-top: 3px solid var(--amex-orange);">
+                        <h4 style="color: var(--amex-orange);">Approach B: Base Model with Prompt Only</h4>
+                        <p>Short instruction to base model without examples. Output is verbose, free-form, section
+                            ordering varies per run.</p>
+                        <div class="verdict"
+                            style="background: rgba(212, 85, 0, 0.06); border-left: 3px solid var(--amex-orange);">
+                            Produces text — but with inconsistent structure. Sections appear in different orders,
+                            lengths vary, some fields are omitted or paraphrased loosely.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout insight" style="margin-top: 10px;">
+                    <strong>The question fine-tuning answers:</strong> Can we compress the behavior of Approach A (good
+                    output) into a model that needs only a short prompt like Approach B — getting consistency without
+                    the prompt engineering overhead?
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 3: What FT Does ===== -->
+            <section>
+                <h2>What Fine-tuning Does Here</h2>
+                <p style="text-align: center; margin-bottom: 10px;">Fine-tuning <strong>reshapes the model's default
+                        behavior</strong> — making the structured output pattern its natural response, not something it
+                    needs to be instructed on each call.</p>
+
+                <div class="split-layout">
+                    <div class="col-50">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Aspect</th>
+                                    <th>Before (Base)</th>
+                                    <th>After (LoRA)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Knowledge</strong></td>
+                                    <td>General world knowledge</td>
+                                    <td>Unchanged</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Behavior</strong></td>
+                                    <td>General-purpose</td>
+                                    <td>Biased toward trained format</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Prompt needed</strong></td>
+                                    <td>Long, with examples</td>
+                                    <td>Short, one-line instruction</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Structure</strong></td>
+                                    <td>Variable per run</td>
+                                    <td>Consistent section ordering</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Weights changed</strong></td>
+                                    <td>—</td>
+                                    <td>13.6M / 8B (0.17%)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-50">
+                        <div class="highlight-box">
+                            <h4 style="font-size: 0.7em; color: var(--amex-navy);">How We Built Training Data</h4>
+                            <p style="font-size: 0.5em;">Used Llama 3.1 with a detailed long prompt (Approach A) to
+                                generate ~200 structured briefs. These outputs became training data. Fine-tuning then
+                                compresses that behavior pattern into a 55MB adapter.</p>
+                        </div>
+                        <div class="callout insight" style="margin-top: 6px;">
+                            <strong>Key distinction:</strong> The adapter learns <em>formatting patterns</em> — which
+                            fields come first, how to phrase numbers, section structure — not new factual knowledge
+                            about the leads.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 4: What's in the Data ===== -->
+            <section>
+                <h2>What's in the Lead Data</h2>
+                <p style="text-align: center; margin-bottom: 8px;">The JSON input contains structured fields across
+                    several categories. These are the actual data points available for brief generation.</p>
+
+                <div class="split-layout">
+                    <div class="col-50">
+                        <div class="signal-card" style="border-left-color: var(--amex-navy);">
+                            <h4>🏢 Company Profile</h4>
+                            <p>Company name, industry, revenue range, member history, relationship tenure</p>
+                        </div>
+                        <div class="signal-card" style="border-left-color: var(--amex-blue);">
+                            <h4>💳 Card Portfolio</h4>
+                            <p>Multiple cards per account — Delta SkyMiles, Business Blue Cash, Corporate Card, etc.
+                                Each with card type, annual spend, category breakdown</p>
+                        </div>
+                        <div class="signal-card" style="border-left-color: var(--amex-green);">
+                            <h4>💰 Spend Metrics</h4>
+                            <p>Total annual spend, spend by category, YoY changes, average transaction size</p>
+                        </div>
+                    </div>
+                    <div class="col-50">
+                        <div class="signal-card" style="border-left-color: var(--amex-orange);">
+                            <h4>📊 Intent Signals</h4>
+                            <p>Hiring activity, acquisition signals, C-suite changes, primary contact designation
+                                changes</p>
+                        </div>
+                        <div class="signal-card" style="border-left-color: var(--amex-red);">
+                            <h4>👤 Contact & Relationship</h4>
+                            <p>Primary contact role, member history, prior interactions, product usage</p>
+                        </div>
+                        <div class="callout insight" style="margin-top: 4px; font-size: 0.48em;">
+                            <strong>What fine-tuning learns here:</strong> Given this JSON structure, always produce a
+                            brief that starts with company overview, then card portfolio summary, then spend highlights,
+                            then intent signals, then recommended actions — in that order, with consistent phrasing.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout warning" style="margin-top: 6px; font-size: 0.48em;">
+                    <strong>Open question:</strong> Which of these signals are most valuable for the sales rep? Signal
+                    selection and weighting is a product decision that should precede further model training.
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 5: Pipeline ===== -->
+            <section>
+                <h2>Proposed Pipeline Architecture</h2>
+                <p style="text-align: center; margin-bottom: 8px;">Separates <strong>what the LLM handles</strong>
+                    (phrasing, structure) from <strong>what code handles</strong> (data accuracy, validation).</p>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="pipeline-step" style="flex: 1;">
+                        <div class="step-num" style="background: var(--amex-blue);">1</div>
+                        <h4>Data Extraction</h4>
+                        <p>Parse JSON into categories. Count cards, sum spend, identify card types (Delta SkyMiles,
+                            Corporate, etc.).</p>
+                        <div class="tech-tag" style="background: rgba(26, 122, 58, 0.1); color: var(--amex-green);">Code
+                        </div>
+                    </div>
+                    <div class="pipeline-step" style="flex: 1;">
+                        <div class="step-num" style="background: var(--amex-navy);">2</div>
+                        <h4>Validation</h4>
+                        <p>Check required fields present. Flag incomplete records rather than generating partial briefs.
+                        </p>
+                        <div class="tech-tag" style="background: rgba(26, 122, 58, 0.1); color: var(--amex-green);">Code
+                        </div>
+                    </div>
+                    <div class="pipeline-step" style="flex: 1;">
+                        <div class="step-num" style="background: var(--amex-blue);">3</div>
+                        <h4>Brief Generation</h4>
+                        <p>Fine-tuned model assembles natural-language brief from validated data. Short prompt triggers
+                            the learned format.</p>
+                        <div class="tech-tag" style="background: rgba(0, 111, 207, 0.1); color: var(--amex-blue);">
+                            Fine-tuned LLM</div>
+                    </div>
+                    <div class="pipeline-step" style="flex: 1;">
+                        <div class="step-num" style="background: var(--amex-navy);">4</div>
+                        <h4>Post-Check</h4>
+                        <p>Cross-reference numbers in output against source JSON. Flag deviations for review or
+                            auto-correct.</p>
+                        <div class="tech-tag" style="background: rgba(26, 122, 58, 0.1); color: var(--amex-green);">Code
+                        </div>
+                    </div>
+                </div>
+
+                <div class="callout insight" style="margin-top: 8px;">
+                    <strong>Why this matters:</strong> The LLM handles Step 3 only — generating natural language in a
+                    consistent structure. Steps 1, 2, 4 are deterministic code that ensures data accuracy. Numbers are
+                    never left to the model alone.
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 6: What We Can Measure ===== -->
+            <section>
+                <h2>How to Measure Quality</h2>
+                <p style="text-align: center; margin-bottom: 8px;">Automated checks that can be applied to every
+                    generated brief — no manual review needed for most outputs.</p>
+
+                <div class="split-layout">
+                    <div class="col-50">
+                        <div class="metric-row">
+                            <span class="metric-name">Field Coverage</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 92%; background: var(--amex-blue);">~92%</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-name">Number Accuracy</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 85%; background: var(--amex-orange);">~85%</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-name">Structure Match</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 95%; background: var(--amex-green);">~95%</div>
+                            </div>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-name">Section Ordering</span>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 98%; background: var(--amex-green);">~98%</div>
+                            </div>
+                        </div>
+
+                        <div class="callout warning" style="margin-top: 8px; font-size: 0.48em;">
+                            <strong>Honest gap:</strong> Number accuracy at ~85% with unvetted synthetic training data.
+                            The post-check step (pipeline Step 4) catches and flags these. With vetted data, this should
+                            improve significantly.
+                        </div>
+                    </div>
+                    <div class="col-50">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Check</th>
+                                    <th>How It Works</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Field Coverage</strong></td>
+                                    <td>Parse output for expected fields (card types, spend, signals). Count present vs.
+                                        expected.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Number Accuracy</strong></td>
+                                    <td>Extract numbers from output, match against source JSON. Flag mismatches.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Structure Match</strong></td>
+                                    <td>Check for expected section headers in correct order.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Length Consistency</strong></td>
+                                    <td>Measure token count variance across briefs. Low σ = consistent output.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="callout insight" style="margin-top: 8px; font-size: 0.48em;">
+                            <strong>Improvement loop:</strong> Failed checks identify specific training data gaps. Add
+                            corrected examples → retrain → re-measure. Each cycle should improve the weakest metric.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 7: Industry Context ===== -->
+            <section>
+                <h2>Fine-tuning in Practice: Verified Results</h2>
+                <p style="text-align: center; margin-bottom: 10px;">Published research and case studies showing
+                    fine-tuned smaller models matching or beating larger prompted models.</p>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="case-card" style="flex: 1;">
+                        <h4>📊 LoRA Land — 310 Models Study</h4>
+                        <p><strong>Predibase (2024)</strong><br> Fine-tuned 310 models with 4-bit LoRA across 10 base
+                            models and 31 tasks. Deployed 25 Mistral-7B LoRA adapters on a single A100 GPU using shared
+                            weights.</p>
+                        <p class="result">Beat GPT-4 by 10 points on average</p>
+                        <p class="source">Source: arXiv:2405.00732 (Zhao et al., May 2024)</p>
+                    </div>
+                    <div class="case-card" style="flex: 1;">
+                        <h4>🏦 CFM — Financial NER</h4>
+                        <p><strong>Capital Fund Management (Hedge Fund)</strong><br> Used Llama 3.1 70B to label
+                            training data, then fine-tuned a 90M-param GLiNER model for company name extraction from
+                            financial news.</p>
+                        <p class="result">93.4% F1 (beat Llama 70B's 92.7%), 16–80× cheaper inference</p>
+                        <p class="source">Source: huggingface.co/blog/cfm-case-study (2024)</p>
+                    </div>
+                    <div class="case-card" style="flex: 1;">
+                        <h4>🔬 LoRA — Original Research</h4>
+                        <p><strong>Microsoft Research (2021)</strong><br> Tested on GPT-3 175B, RoBERTa, DeBERTa, GPT-2.
+                            Freezes base weights, injects small trainable matrices. No additional inference latency.</p>
+                        <p class="result">10,000× fewer params, 3× less memory, same quality</p>
+                        <p class="source">Source: arXiv:2106.09685 (Hu et al., 2021)</p>
+                    </div>
+                </div>
+
+                <div class="callout insight" style="margin-top: 10px;">
+                    <strong>The pattern we follow:</strong> CFM's approach mirrors ours exactly — use a large model
+                    (Llama) to generate labeled examples, then fine-tune a smaller model to do the task cheaper and
+                    faster. LoRA Land confirms this works across 31 different task types.
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 8: On-Prem Value ===== -->
+            <section>
+                <h2>The Value Proposition (On-Prem Context)</h2>
+                <p style="text-align: center; margin-bottom: 6px;">Since we run Llama 3.1 8B on-prem GPU, the value case
+                    is different from API-based pricing.</p>
+
+                <div style="display: flex; gap: 12px; margin-top: 8px;">
+                    <div class="value-pillar" style="flex: 1;">
+                        <div class="icon">⚡</div>
+                        <h4>Throughput Gain</h4>
+                        <p>Shorter prompts (~50 vs 2000+ tokens) = faster inference per request. Same GPU serves more
+                            briefs per hour. More throughput from existing hardware.</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1;">
+                        <div class="icon">🎯</div>
+                        <h4>Output Consistency</h4>
+                        <p>Behavior embedded in weights rather than a long prompt. Model can't "skip" a formatting rule.
+                            Same JSON → same structure, every time.</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1;">
+                        <div class="icon">🔧</div>
+                        <h4>Operational Simplicity</h4>
+                        <p>No prompt versioning or few-shot example management. No risk of prompt edits breaking output
+                            format. Deploy adapter → done.</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1;">
+                        <div class="icon">📈</div>
+                        <h4>Compounding Quality</h4>
+                        <p>Each vetted training example permanently improves the model. Unlike prompt engineering where
+                            each edit risks regressions.</p>
+                    </div>
+                </div>
+
+                <div class="callout insight" style="margin-top: 10px;">
+                    <strong>On-prem economics:</strong> With on-prem GPU, cost savings come from <em>throughput</em> —
+                    shorter prompts = ~40× fewer input tokens processed per call = more briefs per GPU-hour from the
+                    same hardware. The GPU is already provisioned; fine-tuning lets you serve more requests on it.
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 9: End-to-End Workflow ===== -->
+            <section>
+                <h2>End-to-End Workflow</h2>
+
+                <div class="mermaid">
+                    graph LR
+                    subgraph "Data Layer"
+                    A["Lead JSON"] --> B["Parse & Extract"]
+                    B --> C{"Validate Fields"}
+                    end
+
+                    subgraph "Generation"
+                    C -->|Pass| D["Fine-tuned LLM"]
+                    D --> E["Post-Check"]
+                    end
+
+                    subgraph "Quality"
+                    E -->|"Flag"| F["Review / Auto-fix"]
+                    E -->|Pass| H["Deliver Brief"]
+                    end
+
+                    subgraph "Learning"
+                    H --> I["Metrics"]
+                    I --> J["Add to Training Data"]
+                    J --> D
+                    end
+
+                    C -->|Fail| K["Incomplete — Skip"]
+                    F --> H
+
+                    classDef code fill:#1a7a3a,stroke:#145e2c,stroke-width:2px,color:white;
+                    classDef llm fill:#006fcf,stroke:#00175a,stroke-width:2px,color:white;
+                    classDef output fill:#00175a,stroke:#00175a,stroke-width:2px,color:white;
+                    classDef review fill:#d45500,stroke:#a04000,stroke-width:2px,color:white;
+                    classDef data fill:#66b5ff,stroke:#00175a,stroke-width:2px,color:black;
+
+                    class A,B data;
+                    class C,E,F code;
+                    class D llm;
+                    class H output;
+                    class K review;
+                    class I,J data;
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-top: 10px; justify-content: center; font-size: 0.48em;">
+                    <div><span
+                            style="display: inline-block; width: 10px; height: 10px; background: #66b5ff; border-radius: 2px; vertical-align: middle;"></span>
+                        Data</div>
+                    <div><span
+                            style="display: inline-block; width: 10px; height: 10px; background: #1a7a3a; border-radius: 2px; vertical-align: middle;"></span>
+                        Deterministic Code</div>
+                    <div><span
+                            style="display: inline-block; width: 10px; height: 10px; background: #006fcf; border-radius: 2px; vertical-align: middle;"></span>
+                        Fine-tuned LLM</div>
+                    <div><span
+                            style="display: inline-block; width: 10px; height: 10px; background: #00175a; border-radius: 2px; vertical-align: middle;"></span>
+                        Output</div>
+                    <div><span
+                            style="display: inline-block; width: 10px; height: 10px; background: #d45500; border-radius: 2px; vertical-align: middle;"></span>
+                        Review</div>
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 10: What We've Built / What's Next ===== -->
+            <section>
+                <h2>What's Built & What's Next</h2>
+
+                <div class="split-layout">
+                    <div class="col-50">
+                        <h3 style="color: var(--amex-green);">✅ Built (POC Complete)</h3>
+                        <div class="signal-card" style="border-left-color: var(--amex-green);">
+                            <h4>Training Pipeline</h4>
+                            <p>Config-driven (YAML recipes), TRL/PEFT-based LoRA training, dataset preparation with chat
+                                template formatting.</p>
+                        </div>
+                        <div class="signal-card" style="border-left-color: var(--amex-green);">
+                            <h4>Inference & Serving</h4>
+                            <p>LoRA merge to full model, FastAPI serving, chatbot integration. Base vs fine-tuned
+                                comparison mode.</p>
+                        </div>
+                        <div class="signal-card" style="border-left-color: var(--amex-green);">
+                            <h4>Initial Fine-tune</h4>
+                            <p>~200 synthetic examples, Llama 3.1 8B, LoRA rank 16, all attention + MLP layers. Produces
+                                structured briefs from short prompt.</p>
+                        </div>
+                    </div>
+                    <div class="col-50">
+                        <h3 style="color: var(--amex-blue);">🔜 Next Steps</h3>
+                        <div class="signal-card">
+                            <h4>Define Brief Specification</h4>
+                            <p>Agree on which fields, what order, what phrasing style. Product decision before model
+                                improvement.</p>
+                        </div>
+                        <div class="signal-card">
+                            <h4>Vet & Expand Training Data</h4>
+                            <p>Audit existing 200 examples against spec. Expand to 500–1000 with edge cases (missing
+                                fields, unusual card mixes).</p>
+                        </div>
+                        <div class="signal-card">
+                            <h4>Build Automated Evaluation</h4>
+                            <p>Field coverage, number accuracy, structure checks — run on every output to measure
+                                improvement objectively.</p>
+                        </div>
+                        <div class="signal-card">
+                            <h4>Post-Generation Verification</h4>
+                            <p>Cross-reference output numbers against source JSON. Auto-flag or correct deviations.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 11: Closing ===== -->
+            <section>
+                <h2>Summary</h2>
+
+                <blockquote>
+                    Fine-tuning doesn't teach the model new facts about leads — it teaches the model how to consistently
+                    format what it's given. The value is in reliability and speed of output, not new intelligence.
+                </blockquote>
+
+                <div style="display: flex; gap: 15px; margin-top: 15px;">
+                    <div class="value-pillar" style="flex: 1; text-align: center;">
+                        <div class="icon">🔬</div>
+                        <h4>POC Validated</h4>
+                        <p>Training pipeline, inference & serving built and working</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1; text-align: center;">
+                        <div class="icon">📋</div>
+                        <h4>Structured Output</h4>
+                        <p>Consistent brief format from short prompt, matching long-prompt quality</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1; text-align: center;">
+                        <div class="icon">⚡</div>
+                        <h4>Throughput Benefit</h4>
+                        <p>~40× fewer input tokens = more briefs per GPU-hour on-prem</p>
+                    </div>
+                    <div class="value-pillar" style="flex: 1; text-align: center;">
+                        <div class="icon">🛤️</div>
+                        <h4>Clear Path Forward</h4>
+                        <p>Spec → Data vetting → Automated eval → Production pipeline</p>
+                    </div>
+                </div>
+
+                <div class="callout success" style="margin-top: 15px;">
+                    <strong>The pattern is extensible:</strong> The same training pipeline and architecture can apply to
+                    any structured-output task — compliance summaries, client onboarding briefs, account reviews. The
+                    pipeline is built; the data is swappable.
+                </div>
+            </section>
+
+            <!-- ===== SLIDE 12: Q&A ===== -->
+            <section>
+                <h1 style="color: var(--amex-navy); font-size: 2.5em;">Q & A</h1>
+                <h3 style="color: var(--amex-blue); margin-top: 20px; font-size: 1em;">Thank You</h3>
+            </section>
+
+            <!-- ===== APPENDIX A: LoRA Mechanics ===== -->
+            <section>
+                <div class="appendix-marker">APPENDIX</div>
+                <h2>How LoRA Fine-tuning Works</h2>
+
+                <div class="split-layout">
+                    <div class="col-50">
+                        <div class="highlight-box">
+                            <h4 style="font-size: 0.7em; color: var(--amex-navy);">The LoRA Mechanism</h4>
+                            <p style="font-size: 0.5em; margin-bottom: 6px;">Freezes all 8B base parameters and injects
+                                small trainable matrices into attention and MLP layers.</p>
+                            <table style="font-size: 0.95em;">
+                                <tr>
+                                    <td><strong>Base params</strong></td>
+                                    <td>8,030,000,000 (frozen)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Adapter params</strong></td>
+                                    <td>13,600,000 (trainable)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>% trainable</strong></td>
+                                    <td>0.17%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Adapter on disk</strong></td>
+                                    <td>~55 MB</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Training time</strong></td>
+                                    <td>~30 min on A100</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-50">
+                        <div class="highlight-box">
+                            <h4 style="font-size: 0.7em; color: var(--amex-navy);">What Gets Trained</h4>
+                            <p style="font-size: 0.48em; margin-bottom: 5px;"><strong>Attention (q, k, v, o):</strong>
+                                Which parts of the JSON the model prioritizes when generating each token of the brief.
+                            </p>
+                            <p style="font-size: 0.48em; margin-bottom: 5px;"><strong>MLP (gate, up, down):</strong> How
+                                it transforms attended information into output phrasing and structure.</p>
+                            <p style="font-size: 0.48em;"><strong>Training signal:</strong> Loss computed on assistant
+                                tokens only. Model learns the output pattern, not input echoing.</p>
+                        </div>
+                        <div class="callout insight" style="font-size: 0.48em; margin-top: 6px;">
+                            <strong>Rank 16</strong> with 7 target modules = strong format learning capacity. Lower rank
+                            (4–8) can suffice for simpler formatting tasks.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== APPENDIX B: Decision Matrix ===== -->
+            <section>
+                <div class="appendix-marker">APPENDIX</div>
+                <h2>When Fine-tuning Makes Sense</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Consider</th>
+                            <th>Prompt Engineering</th>
+                            <th>Fine-tuning (LoRA)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Setup effort</strong></td>
+                            <td>Low — write prompt, iterate</td>
+                            <td>Medium — prepare data, train</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prompt length</strong></td>
+                            <td>Long per call (2000+ tokens)</td>
+                            <td>Short per call (~50 tokens)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output consistency</strong></td>
+                            <td>Varies with prompt wording</td>
+                            <td>Stable — format in weights</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maintenance</strong></td>
+                            <td>Prompt versioning, regression risk</td>
+                            <td>Retrain with updated data</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best for volume</strong></td>
+                            <td>Low (prototyping, exploration)</td>
+                            <td>High (repeated, production tasks)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GPU throughput</strong></td>
+                            <td>Low (long prompts → slower)</td>
+                            <td>High (short prompts → faster)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout insight" style="margin-top: 10px;">
+                    <strong>Rule of thumb:</strong> If the task is repeated hundreds of times daily with the same
+                    expected format, fine-tuning likely makes sense. If the format changes frequently or volume is low,
+                    prompt engineering is more practical.
+                </div>
+            </section>
+
+            <!-- ===== APPENDIX C: Sources ===== -->
+            <section>
+                <div class="appendix-marker">APPENDIX</div>
+                <h2>Sources & References</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Claim</th>
+                            <th>Source</th>
+                            <th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>310 LoRA models beat GPT-4 by 10 pts avg; 25 models on 1 GPU</td>
+                            <td>Zhao et al., Predibase (May 2024)</td>
+                            <td style="font-size: 0.9em;">arxiv.org/abs/2405.00732</td>
+                        </tr>
+                        <tr>
+                            <td>Fine-tuned 90M model beat Llama 70B (93.4% vs 92.7% F1), 16–80× cheaper</td>
+                            <td>CFM × Hugging Face case study (2024)</td>
+                            <td style="font-size: 0.9em;">huggingface.co/blog/cfm-case-study</td>
+                        </tr>
+                        <tr>
+                            <td>LoRA: 10,000× fewer trainable params, 3× less GPU memory, same quality</td>
+                            <td>Hu et al., Microsoft Research (2021)</td>
+                            <td style="font-size: 0.9em;">arxiv.org/abs/2106.09685</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="callout insight" style="margin-top: 12px;">
+                    <strong>All sources are publicly accessible.</strong> The LoRA Land and LoRA papers are
+                    peer-reviewed on arXiv. The CFM case study is published on Hugging Face's official blog with full
+                    code and methodology.
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.0.4/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            controls: true,
+            progress: true,
+            center: true,
+            width: 1280,
+            height: 800,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0
+        });
+
+        Reveal.on('ready', event => {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'base',
+                themeVariables: {
+                    fontFamily: 'Helvetica Neue',
+                    primaryColor: '#f5f6f8',
+                    primaryTextColor: '#333333',
+                    primaryBorderColor: '#00175a',
+                    lineColor: '#66b5ff',
+                    secondaryColor: '#006fcf',
+                    tertiaryColor: '#00175a'
+                }
+            });
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+
+        Reveal.on('slidechanged', event => {
+            const graphs = event.currentSlide.querySelectorAll('.mermaid');
+            if (graphs.length > 0) {
+                mermaid.init(undefined, graphs);
+            }
+        });
+    </script>
+</body>
+
+</html>

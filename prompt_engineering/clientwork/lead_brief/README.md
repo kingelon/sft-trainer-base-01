@@ -27,7 +27,7 @@ lead_brief/
 |---|---|---|
 | **Pitch** | [prompt_v1_structured.md](pitch/prompt_v1_structured.md) | ✅ Active — 7 scenarios, structured reasoning, verified card benefits |
 | **Lead Summary** | — | 🔲 Not started |
-| **Why Good Lead** | — | 🔲 Not started |
+| **Why Good Lead** | [prompt_v1_why_good_lead.md](why_good_lead/prompt_v1_why_good_lead.md) | ✅ Active — production prompt, 7 examples, signal-driven |
 
 ## How Components Work
 
